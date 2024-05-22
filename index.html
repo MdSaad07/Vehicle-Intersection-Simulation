@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Vehicle Intersection Simulation</title>
+</head>
+<body>
+<header>
+    <div class="container" style="margin:auto;">
+       <center><h1>Vehicle Intersection Simulation</h1></center> 
+    </div>
+</header>
+<div class="container">
+    <button id="startButton">Start Signal</button>
+    <button id="stopButton">Stop Signal</button>
+    <button id="clearSignal">Clear Signal</button>
+    <div class="columns">
+        <div id="approachingColumn" class="column">
+            <h2>Approaching Vehicles</h2>
+            <div id="approachingOutput"></div>
+        </div>
+        <div id="clearedColumn" class="column">
+            <h2>Cleared Vehicles</h2>
+            <div id="clearedOutput"></div>
+        </div>
+        <div id="waitingColumn" class="column">
+            <h2>Waiting Vehicles</h2>
+            <div id="waitingOutput"></div>
+        </div>
+    </div>
+    
+    <div id="output"></div>
+</div>
+<footer>
+    <div class="container" style="margin: auto;">
+        <p>Developed by Mohammed Saad Fazal</p>
+        <p>For queries: <a href="mailto:mdsaad7803@gmail.com">mdsaad7803@gmail.com</a> </p>
+    </div>
+</footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var data = [
+            { message: "Vehicle 1 approaching the intersection.", status: "approaching", waiting: true },
+            { message: "Vehicle 2 approaching the intersection.", status: "approaching", waiting: true },
+            { message: "Emergency vehicle approaching the intersection...", status: "approaching", waiting: true },
+            { message: "Vehicle 1 cleared the intersection.", status: "cleared", waiting: false },
+            { message: "Vehicle 2 cleared the intersection.", status: "cleared", waiting: false },
+            { message: "Emergency vehicle cleared the intersection.", status: "cleared", waiting: false },
+            { message: "Vehicle 3 approaching the intersection.", status: "approaching", waiting: true },
+            { message: "Vehicle 4 approaching the intersection.", status: "approaching", waiting: true },
+            { message: "Vehicle 3 waiting at the intersection.", status: "waiting", waiting: true },
+            { message: "Vehicle 4 waiting at the intersection.", status: "waiting", waiting: true }
+        ];
+
+        var approachingOutput = document.getElementById("approachingOutput");
+        var clearedOutput = document.getElementById("clearedOutput");
+        var waitingOutput = document.getElementById("waitingOutput");
+        var intervalId;
+
+        function displayMessage(message, status) {
+            var p = document.createElement("p");
+            p.textContent = message;
+            if (status === "approaching") {
+                approachingOutput.appendChild(p);
+            } else if (status === "cleared") {
+                clearedOutput.appendChild(p);
+            } else if (status === "waiting") {
+                waitingOutput.appendChild(p);
+            }
+        }
+
+        function startSimulation() {
+            var index = 0;
+            intervalId = setInterval(function () {
+                if (index < data.length) {
+                    displayMessage(data[index].message, data[index].status);
+                    index++;
+                } else {
+                    clearInterval(intervalId);
+                }
+            }, 1000);
+        }
+
+        function stopSimulation() {
+            clearInterval(intervalId);
+            document.getElementById("output").innerText = "Signal has been stopped.";
+        }
+
+        function clearSimulation() {
+            approachingOutput.innerHTML = "";
+            clearedOutput.innerHTML = "";
+            waitingOutput.innerHTML = "";
+            document.getElementById("output").innerText = "Signal has been cleared.";
+
+        }
+
+        const startButton = document.getElementById("startButton");
+        const stopButton = document.getElementById("stopButton");
+        const clearSignalButton = document.getElementById("clearSignal");
+
+        clearSignalButton.addEventListener("click", () => {
+            clearSimulation();
+        })
+
+        startButton.addEventListener("click", function() {
+            document.getElementById("output").innerText = "Signal is now active!";
+            startSimulation();
+        });
+
+        stopButton.addEventListener("click", function() {
+            stopSimulation();
+        });
+    });
+</script>
+</body>
+</html>
